@@ -8,7 +8,7 @@ void Interface::ProcessUser() {
 	cout << "input math expression" << endl;
 	cin >> str;
 	try {
-		calculator.ProcessCalculate(str);
+		cout << calculator.ProcessCalculate(str) << endl;
 	}
 	catch (string message) {
 		cout << message;

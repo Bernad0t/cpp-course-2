@@ -2,35 +2,6 @@
 #include <queue>
 #include <stack>
 
-ElementPolishEnter::ElementPolishEnter(ElementPolishEnter const & const copy) : oper(copy.oper) {
-	if (copy.number != nullptr) {
-		number = new double;
-		*number = *copy.number;
-	}
-	else if (copy.oper != nullptr) {
-		number = nullptr;
-	}
-	
-}
-
-ElementPolishEnter::ElementPolishEnter(Operator* oper){
-	this->oper = oper;
-	number = nullptr;
-}
-
-ElementPolishEnter::ElementPolishEnter(double number) {
-	this->number = new double;
-	*(this->number) = number;
-	oper = nullptr;
-}
-
-ElementPolishEnter::~ElementPolishEnter() {
-	if (oper != nullptr)
-		delete oper;
-	if (number != nullptr)
-		delete number;
-}
-
 Calculator::Calculator() {
 	operators["*"] = new Multiply();
 	operators["/"] = new Divide();
@@ -39,9 +10,12 @@ Calculator::Calculator() {
 }
 
 Calculator::~Calculator() {
-	for (const auto& element : operators) {
+	for (auto&& element : operators) {
 		delete element.second;
-		operators.erase(element.first);
+	}
+	for (auto&& element : elements) {
+		if (element->GetTypePolish() != TypePolishEl::OPERATOR)
+			delete element;
 	}
 }
 
@@ -74,16 +48,19 @@ void Calculator::ProcessString(string str) {
 	stack<Operator**> operStack;
 	int i = 0;
 	while (i < str.length()) {  // polish entry
-		if (str[i] == '(')
+		if (str[i] == '(') {
 			operStack.push(nullptr);
+			i++;
+		}
 		else if (str[i] >= '0' && str[i] <= '9') {
-			ElementPolishEnter el(GetNumberFromStr(str, i));
+			ElPolishBase* el = new ElPolishNumber(GetNumberFromStr(str, i));
 			elements.push_back(el);
 		}
 		else if (str[i] == ')') {
 			bool bracketVisited = false;
-			while (operStack.top() != nullptr || operStack.size() > 0) {
-				elements.push_back(ElementPolishEnter(*operStack.top()));
+			while (operStack.top() != nullptr && operStack.size() > 0) {
+				ElPolishBase* el = new ElPolishOp(*operStack.top());
+				elements.push_back(el);
 				operStack.pop();
 				if (operStack.top() == nullptr)
 					bracketVisited = true;
@@ -91,6 +68,7 @@ void Calculator::ProcessString(string str) {
 			if (!bracketVisited)
 				throw string("open bracket don't exist");
 			operStack.pop();
+			i++;
 		}
 		else{
 			Operator** oper = new Operator*;
@@ -103,7 +81,8 @@ void Calculator::ProcessString(string str) {
 			if (oper == nullptr)
 				throw string("operator don't exist");
 			while (operStack.size() > 0 && operStack.top() != nullptr && !CompareOrderOperator(*oper, *operStack.top())) {
-				elements.push_back(ElementPolishEnter(*operStack.top()));
+				ElPolishBase* el = new ElPolishOp(*operStack.top());
+				elements.push_back(el);
 				operStack.pop();
 			}
 			operStack.push(oper);
@@ -112,9 +91,9 @@ void Calculator::ProcessString(string str) {
 	while (!operStack.empty()) {
 		if (operStack.top() == nullptr)
 			throw string("close bracket don't exist");
-		ElementPolishEnter* el = new ElementPolishEnter(*operStack.top());
+		ElPolishBase* el = new ElPolishOp(*operStack.top());
 		operStack.pop();
-		elements.push_back(*el);
+		elements.push_back(el);
 	}
 }
 
@@ -126,28 +105,26 @@ double Calculator::ProcessCalculate(string str) {
 		throw message;
 	}
 	double solution = 0;
-	double expressResult = 0;
-	queue<Operator*> operQueue;
-	queue<double> numberQueue;
+	stack<double> numberStack;
+	auto getNextNumStack { [](stack<double> & numberStack) {numberStack.pop(); return numberStack.top();} };
 	for (auto&& element : elements) {
-		if (element.oper != nullptr) {
-			operQueue.push(element.oper);
+		if (element->GetTypePolish() == TypePolishEl::OPERATOR) {
+			ElPolishOp* oper = dynamic_cast<ElPolishOp*>(element);
+			if (oper->oper->property == Properties::unar) {
+				solution += oper->oper->apply(numberStack.top());
+				numberStack.pop();
+				numberStack.push(solution);
+			}
+			else {
+				solution = oper->oper->apply(getNextNumStack(numberStack), numberStack.top());
+				numberStack.pop();
+				numberStack.push(solution);
+			}
 		}
 		else {
-			numberQueue.push(*element.number);
-			if (operQueue.front()->property == Properties::unar) {
-				solution += operQueue.front()->apply(numberQueue.front());
-				operQueue.pop();
-				numberQueue.pop();
-				numberQueue.push(solution);
-			}
-			else if (numberQueue.size() == 2) {
-				solution += operQueue.front()->apply(numberQueue.front(), numberQueue.back());
-				operQueue.pop();
-				numberQueue.pop();
-				numberQueue.pop();
-				numberQueue.push(solution);
-			}
+			ElPolishNumber* number = dynamic_cast<ElPolishNumber*>(element);
+			numberStack.push(*number->number);
 		}
-	}
+	} 
+	return solution;
 }
