@@ -58,7 +58,7 @@ void Calculator::ProcessString(string str) {
 		}
 		else if (str[i] == ')') {
 			bool bracketVisited = false;
-			while (operStack.top() != nullptr && operStack.size() > 0) {
+			while (operStack.size() > 0 && operStack.top() != nullptr) {
 				ElPolishBase* el = new ElPolishOp(*operStack.top());
 				elements.push_back(el);
 				operStack.pop();
