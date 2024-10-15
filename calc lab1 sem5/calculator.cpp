@@ -66,7 +66,7 @@ void Calculator::ProcessString(string str) {
 					bracketVisited = true;
 			}
 			if (!bracketVisited)
-				throw string("open bracket don't exist");
+				throw string("one bracket don't exist");
 			operStack.pop();
 			i++;
 		}
