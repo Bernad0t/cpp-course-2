@@ -1,13 +1,13 @@
 #include "./calculator.h"
 #include <queue>
 #include <stack>
+#include "dll_loading.h"
 
 Calculator::Calculator() {
 	operators["*"] = new Multiply();
 	operators["/"] = new Divide();
 	operators["+"] = new Sum();
 	operators["-"] = new Subtract();
-	operators["cos"] = new Cos();
 }
 
 Calculator::~Calculator() {
@@ -15,7 +15,7 @@ Calculator::~Calculator() {
 		delete element.second;
 	}
 	for (auto&& element : elements) {
-		if (element->GetTypePolish() != TypePolishEl::OPERATOR)
+		if (element->GetTypePolish() != TypePolishEl::OPERATOR) // all oper ref on map (operators)
 			delete element;
 	}
 }
@@ -37,8 +37,15 @@ Operator* Calculator::GetOperatorFromStr(string str, int& cursor) {
 	}
 	if (operators.count(strOper) != 0)
 		return operators[strOper];
-	else
-		throw string("operator dont't exist");
+	else {
+		try{
+			operators.insert(dll.loading(strOper));
+			return operators[strOper];
+		}
+		catch (string message){
+			throw message;
+		}
+	}
 }
 
 bool Calculator::CompareOrderOperator(Operator* oper, Operator* compOper) {
@@ -46,7 +53,7 @@ bool Calculator::CompareOrderOperator(Operator* oper, Operator* compOper) {
 }
 
 void Calculator::ProcessString(string str) {
-	stack<Operator**> operStack;
+	stack<Operator*> operStack;
 	int i = 0;
 	while (i < str.length()) {  // polish entry
 		if (str[i] == ' ') {
@@ -64,7 +71,7 @@ void Calculator::ProcessString(string str) {
 		else if (str[i] == ')') {
 			bool bracketVisited = false;
 			while (operStack.size() > 0 && operStack.top() != nullptr) {
-				ElPolishBase* el = new ElPolishOp(*operStack.top());
+				ElPolishBase* el = new ElPolishOp(operStack.top());
 				elements.push_back(el);
 				operStack.pop();
 				if (operStack.top() == nullptr)
@@ -76,17 +83,17 @@ void Calculator::ProcessString(string str) {
 			i++;
 		}
 		else{
-			Operator** oper = new Operator*;
+			Operator* oper;
 			try {
-				*oper = GetOperatorFromStr(str, i);
+				oper = GetOperatorFromStr(str, i);
 			}
 			catch(string message) {
 				throw message;
 			}
 			if (oper == nullptr)
 				throw string("operator don't exist");
-			while (operStack.size() > 0 && operStack.top() != nullptr && !CompareOrderOperator(*oper, *operStack.top())) {
-				ElPolishBase* el = new ElPolishOp(*operStack.top());
+			while (operStack.size() > 0 && operStack.top() != nullptr && !CompareOrderOperator(oper, operStack.top())) {
+				ElPolishBase* el = new ElPolishOp(operStack.top());
 				elements.push_back(el);
 				operStack.pop();
 			}
@@ -96,7 +103,7 @@ void Calculator::ProcessString(string str) {
 	while (!operStack.empty()) {
 		if (operStack.top() == nullptr)
 			throw string("close bracket don't exist");
-		ElPolishBase* el = new ElPolishOp(*operStack.top());
+		ElPolishBase* el = new ElPolishOp(operStack.top());
 		operStack.pop();
 		elements.push_back(el);
 	}
