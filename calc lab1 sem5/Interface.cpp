@@ -5,18 +5,23 @@ using namespace std;
 
 void Interface::ProcessUser() {
 	string str;
-	cout << "input math expression" << endl;
-	getline(cin, str);
-	try {
-		cout << calculator.ProcessCalculate(str) << endl;
-	}
-	catch (string message) {
-		cout << message;
+	while (str != "/0") {
+		cout << "input math expression. For exite input /0" << endl;
+		getline(cin, str);
+		if (str == "/0")
+			break;
+		try {
+			cout << calculator.ProcessCalculate(str) << endl;
+		}
+		catch (string message) {
+			cout << message;
+		}
+		str.clear();
 	}
 }
 
 int main() {
-	Interface interface;
-	interface.ProcessUser();
+	Interface interf;
+	interf.ProcessUser();
 	return 0;
 }

@@ -1,6 +1,8 @@
 #include "./operator.h"
 #include <string>
 
+using namespace std;
+
 double BinaryOperator::Calculate(stack<double>& numbers) {
 	auto getNextNumStack{ [](stack<double>& numberStack) {numberStack.pop(); return numberStack.top();} };
 	double solution = apply(getNextNumStack(numbers), numbers.top());

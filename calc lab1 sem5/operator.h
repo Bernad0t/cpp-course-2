@@ -2,32 +2,23 @@
 #include <vector>
 #include <stack>
 
-using namespace std;
-
 class Operator {
 public:
 	int priority;
-	virtual double Calculate(stack<double>& numbers) = 0;
+	virtual double Calculate(std::stack<double>& numbers) = 0;
 };
 
 class BinaryOperator : public Operator {
 public:
 	virtual double apply(double firstNumber, double secondNumber) = 0;
-	double Calculate(stack<double>& numbers) override;
+	double Calculate(std::stack<double>& numbers) override;
 };
 
 class UnarOperator : public Operator {
 public:
 	virtual double apply(double firstNumber) = 0;
-	double Calculate(stack<double>& numbers) override;
+	double Calculate(std::stack<double>& numbers) override;
 };
-
-class Cos : public UnarOperator {
-public:
-	Cos() { priority = 5; }
-	double apply(double firstNumber) { return cos(firstNumber); }
-};
-
 
 class Multiply : public BinaryOperator {
 public:
