@@ -1,25 +1,31 @@
 #pragma once
 #include <vector>
+#include <stack>
 
 using namespace std;
 
-enum class Properties {
-	binary = 0,
-	unar = 1
-};
-
 class Operator {
 public:
-	Properties property;
 	int priority;
-	virtual double apply(double firstNumber, double secondNumber) = 0;
-	virtual double apply(double number) = 0;
+	virtual double Calculate(stack<double>& numbers) = 0;
 };
 
 class BinaryOperator : public Operator {
 public:
 	virtual double apply(double firstNumber, double secondNumber) = 0;
-	double apply(double number) override;
+	double Calculate(stack<double>& numbers) override;
+};
+
+class UnarOperator : public Operator {
+public:
+	virtual double apply(double firstNumber) = 0;
+	double Calculate(stack<double>& numbers) override;
+};
+
+class Cos : public UnarOperator {
+public:
+	Cos() { priority = 5; }
+	double apply(double firstNumber) { return cos(firstNumber); }
 };
 
 

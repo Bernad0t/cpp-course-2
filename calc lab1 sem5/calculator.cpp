@@ -7,6 +7,7 @@ Calculator::Calculator() {
 	operators["/"] = new Divide();
 	operators["+"] = new Sum();
 	operators["-"] = new Subtract();
+	operators["cos"] = new Cos();
 }
 
 Calculator::~Calculator() {
@@ -30,7 +31,7 @@ double Calculator::GetNumberFromStr(string str, int& cursor) {
 
 Operator* Calculator::GetOperatorFromStr(string str, int& cursor) {
 	string strOper;
-	while ((str[cursor] < '0' || str[cursor] > '9') && str[cursor] != ')' && str[cursor] != '(') {
+	while ((str[cursor] < '0' || str[cursor] > '9') && str[cursor] != ')' && str[cursor] != '(' && operators.count(strOper) == 0) {
 		strOper += str[cursor];
 		cursor++;
 	}
@@ -106,20 +107,11 @@ double Calculator::ProcessCalculate(string str) {
 	}
 	double solution = 0;
 	stack<double> numberStack;
-	auto getNextNumStack { [](stack<double> & numberStack) {numberStack.pop(); return numberStack.top();} };
 	for (auto&& element : elements) {
 		if (element->GetTypePolish() == TypePolishEl::OPERATOR) {
 			ElPolishOp* oper = dynamic_cast<ElPolishOp*>(element);
-			if (oper->oper->property == Properties::unar) {
-				solution += oper->oper->apply(numberStack.top());
-				numberStack.pop();
-				numberStack.push(solution);
-			}
-			else {
-				solution = oper->oper->apply(getNextNumStack(numberStack), numberStack.top());
-				numberStack.pop();
-				numberStack.push(solution);
-			}
+			solution = oper->oper->Calculate(numberStack);
+			numberStack.push(solution);
 		}
 		else {
 			ElPolishNumber* number = dynamic_cast<ElPolishNumber*>(element);
