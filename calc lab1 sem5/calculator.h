@@ -4,11 +4,13 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "dll_loading.h"
 
 using namespace std;
 
 class Calculator {
 public:
+	LoadingDll dll;
 	double ProcessCalculate(string str);
 	Calculator();
 	~Calculator();

@@ -15,33 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="operator.h">
+    <ClInclude Include="framework.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="calculator.h">
+    <ClInclude Include="pch.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="interface.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="elpolish.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="dll_loading.h">
+    <ClInclude Include="functioncos.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="operator.cpp">
+    <ClCompile Include="dllmain.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="calculator.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Interface.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="dll_loading.cpp">
+    <ClCompile Include="pch.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

@@ -122,6 +122,8 @@ double Calculator::ProcessCalculate(string str) {
 		if (element->GetTypePolish() == TypePolishEl::OPERATOR) {
 			ElPolishOp* oper = dynamic_cast<ElPolishOp*>(element);
 			solution = oper->oper->Calculate(numberStack);
+			delete oper->oper;
+			delete oper;
 			numberStack.push(solution);
 		}
 		else {

@@ -1,0 +1,15 @@
+﻿  calculator.cpp
+C:\Users\Admin\source\repos\cpp sem5 hom\calc\calc lab1 sem5\calculator.cpp(58,11): warning C4018: <: несоответствие типов со знаком и без знака
+  dll_loading.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+C:\Users\Admin\source\repos\cpp sem5 hom\calc\calc lab1 sem5\dll_loading.cpp(13,32): error C3083: filesystem: символ слева от "::" должен представлять тип
+C:\Users\Admin\source\repos\cpp sem5 hom\calc\calc lab1 sem5\dll_loading.cpp(13,44): error C2039: "directory_iterator": не является членом "std".
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.33.31629\include\iostream(19): message : см. объявление "std"
+C:\Users\Admin\source\repos\cpp sem5 hom\calc\calc lab1 sem5\dll_loading.cpp(13,2): error C2530: entry: ссылки должны быть инициализированы
+C:\Users\Admin\source\repos\cpp sem5 hom\calc\calc lab1 sem5\dll_loading.cpp(13,2): error C3531: entry: символ, тип которого содержит спецификатор 'auto' должен иметь инициализатор
+C:\Users\Admin\source\repos\cpp sem5 hom\calc\calc lab1 sem5\dll_loading.cpp(13,25): error C2143: синтаксическая ошибка: отсутствие ";" перед ":"
+C:\Users\Admin\source\repos\cpp sem5 hom\calc\calc lab1 sem5\dll_loading.cpp(13,2): error C3861: directory_iterator: идентификатор не найден
+C:\Users\Admin\source\repos\cpp sem5 hom\calc\calc lab1 sem5\dll_loading.cpp(13,70): error C2143: синтаксическая ошибка: отсутствие ";" перед ")"
+  Interface.cpp
+  operator.cpp
+  Создание кода...
