@@ -31,7 +31,7 @@ double Calculator::GetNumberFromStr(string str, int& cursor) {
 
 Operator* Calculator::GetOperatorFromStr(string str, int& cursor) {
 	string strOper;
-	while ((str[cursor] < '0' || str[cursor] > '9') && str[cursor] != ')' && str[cursor] != '(' && operators.count(strOper) == 0) {
+	while ((str[cursor] < '0' || str[cursor] > '9') && str[cursor] != ')' && str[cursor] != '(' && str[cursor] != ' ' && operators.count(strOper) == 0) {
 		strOper += str[cursor];
 		cursor++;
 	}
@@ -49,6 +49,10 @@ void Calculator::ProcessString(string str) {
 	stack<Operator**> operStack;
 	int i = 0;
 	while (i < str.length()) {  // polish entry
+		if (str[i] == ' ') {
+			i++;
+			continue;
+		}
 		if (str[i] == '(') {
 			operStack.push(nullptr);
 			i++;

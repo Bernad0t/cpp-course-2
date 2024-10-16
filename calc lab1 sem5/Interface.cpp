@@ -6,7 +6,7 @@ using namespace std;
 void Interface::ProcessUser() {
 	string str;
 	cout << "input math expression" << endl;
-	cin >> str;
+	getline(cin, str);
 	try {
 		cout << calculator.ProcessCalculate(str) << endl;
 	}
