@@ -5,7 +5,7 @@ class Engine {
 	map<string, Wrapper*> commands;
 public:
 	void register_command(Wrapper* wrapper, string&& command) {
-		if (commands.count(command) > 0)
+		if (commands.count(command) > 0) // переназначим
 			commands.at(command) = wrapper;
 		else
 			commands.emplace(command, wrapper);

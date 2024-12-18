@@ -43,7 +43,7 @@ string TextWorker::doFristLetterSentencesUp(map<string, string> args) {
 
     for (char& c : result) {
         if (new_sentence && isalpha(c)) {
-            c = std::toupper(c);
+            c = toupper(c);
             new_sentence = false;
         }
         if (c == '.' || c == '?' || c == '!') {
@@ -59,7 +59,7 @@ string TextWorker::addSentenceNumbering(map<string, string> args) {
     string line;
     int sentence_count = 1;
 
-    while (std::getline(iss, line, '.')) {
+    while (getline(iss, line, '.')) {
         if (line.empty()) {
             continue;
         }

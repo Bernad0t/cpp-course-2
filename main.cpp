@@ -23,7 +23,7 @@ void test() {
     engine.register_command(&findWrapper, "find");
 
     string text = "hello world. this is a test. another sentence.";
-
+    //тесты
     cout << engine.execute_command("replace_word", { {"text", text}, {"arg1", "world"}, {"arg2", "universe"} }) << endl;
     cout << engine.execute_command("up_words", { {"text", text} }) << endl;
     cout << engine.execute_command("up_sentences", { {"text", text} }) << endl;
