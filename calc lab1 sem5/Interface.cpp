@@ -13,8 +13,8 @@ void Interface::ProcessUser() {
 		try {
 			cout << calculator.ProcessCalculate(str) << endl;
 		}
-		catch (string message) {
-			cout << message;
+		catch (runtime_error& message) {
+			cout << message.what();
 		}
 		str.clear();
 	}

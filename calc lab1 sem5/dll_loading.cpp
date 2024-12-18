@@ -23,7 +23,7 @@ std::pair<std::string, Operator*> LoadingDll::loading(std::string nameOp) {
 		}
 		this->dllHandler.push_back(dllHandler);
 	}
-	throw std::string("don't exist dll");
+	throw std::runtime_error("don't exist dll");
 }
 
 LoadingDll::~LoadingDll() {
